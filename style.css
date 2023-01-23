@@ -1,0 +1,67 @@
+.body_index{
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Roboto Slab', sans-serif;
+    background-image: url(img/fon.png);
+    display: flex;
+    flex-direction: column;
+}
+
+.header{
+    text-align: center;
+    color: white;
+    padding: 10px;
+    background-color: black;
+}
+
+.nav-item{
+    padding: 5px 30px;
+    font-size: 20px;
+}
+
+.nav-b{
+    font-size: 30px;
+}
+
+.main_index{
+    color: white;
+    flex-grow: 1;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.index-item{
+    font-size: 20px;
+}
+
+.big{
+    font-size: 24px;
+}
+
+.index-item a{
+    color: rgb(158, 156, 156);
+}
+
+.button{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+    font-size: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: black;
+    cursor: pointer;
+}
+
+.footer{
+    color: white;
+    text-align: center;
+    padding: 20px;
+    background-color: black;
+}
