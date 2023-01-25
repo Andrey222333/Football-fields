@@ -65,3 +65,16 @@
     padding: 20px;
     background-color: black;
 }
+
+.body_map{
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Roboto Slab', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.main_map{
+    flex-grow: 1;
+    height: 100%;
+}
