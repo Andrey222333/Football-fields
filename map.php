@@ -3,16 +3,57 @@ require("database.php");
 
 $football_fields = array();
 $points = array();
+$paid = str_replace('_', ' ', $_POST["select1"]);
+$district = str_replace('_', ' ', $_POST["select2"]);
+$surface_type = str_replace('_', ' ', $_POST["select3"]);
 
-$query =  mysqli_query($mysql, "SELECT * FROM fields");
-while ($row = mysqli_fetch_assoc($query)) {
-    $fields = array();
+if ($paid == "Не выбрано" && $surface_type == "Не выбрано" && $district == "Не выбрано") {
+    $query =  mysqli_query($mysql, "SELECT * FROM fields");
+    while ($row = mysqli_fetch_assoc($query)) {
+        $fields = array();
 
-    array_push($fields,(float)$row["longitude"]);
-    array_push($fields,(float)$row["width"]);
-    array_push($points, $fields);
-    array_push($football_fields, $row);
+        array_push($fields,(float)$row["longitude"]);
+        array_push($fields,(float)$row["width"]);
+        array_push($points, $fields);
+        array_push($football_fields, $row);
+    }
+} else {
+    $request = array();
+    $sql_request = "";
+    $key = array();
+
+    if ($paid != "Не выбрано") {
+        $request["paid"] = $paid;
+        array_push($key, "paid");
+    }
+    if ($surface_type != "Не выбрано") {
+        $request["surface_type"] = $surface_type;
+        array_push($key, "surface_type");
+    }
+    if ($district != "Не выбрано") {
+        $request["district"] = $district;
+        array_push($key, "district");
+    }
+
+    if (count($request) == 1){
+        $sql_request = "SELECT * FROM fields WHERE ".$key[0]." = \"".$request[$key[0]]."\"; ";
+    } else if (count($request) == 2) {
+        $sql_request = "SELECT * FROM fields WHERE ".$key[0]." = \"".$request[$key[0]]."\" AND ".$key[1]." = \"".$request[$key[1]]."\"; ";
+    }else if (count($request) == 3) {
+        $sql_request = "SELECT * FROM fields WHERE ".$key[0]." = \"".$request[$key[0]]."\" AND ".$key[1]." = \"".$request[$key[1]]."\" AND ".$key[2]." = \"".$request[$key[2]]."\"; ";
+    }
+
+    $query =  mysqli_query($mysql, $sql_request);
+    while ($row = mysqli_fetch_assoc($query)) {
+        $fields = array();
+
+        array_push($fields,(float)$row["longitude"]);
+        array_push($fields,(float)$row["width"]);
+        array_push($points, $fields);
+        array_push($football_fields, $row);
+    }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -27,12 +68,36 @@ while ($row = mysqli_fetch_assoc($query)) {
     <title>Football fields</title>
 </head>
 <body class="body_map">
+    <header class="header">
+        <div class="container-fluid">
+             <div class="row">
+                <div class="col">
+                    <div class="nav-item nav-b"><b>Football fields</b></div>
+                 </div>
+            </div>
+        </div>
+    </header>
     <main class="main_map">
-        <div id="map" style="width: 100%; height: 100vh"></div>
+        <div id="map" style="width: 100%; height: 90vh">
+            <a href="filter.php"><button class="bt" style="position: absolute; margin-top: 10px; margin-right: 10px; right: 0; z-index: 1">Фильтр</button></a>
+        </div>
     </main>
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <div class="copyright"><b>© Football fields, 2023</b></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script type="text/javascript">
+
     football_fields = <?php echo json_encode($football_fields) ?>;
+
     ymaps.ready(init);
+
     function init(){
         var myMap = new ymaps.Map("map", {
             center: [55.7522, 37.6156],
@@ -44,35 +109,19 @@ while ($row = mysqli_fetch_assoc($query)) {
         myMap.controls.remove('searchControl');
 
         control = myMap.controls.get('routeButtonControl');
-
+        control.routePanel.state.set('from', 'улица Проходчиков, дом 10, корпус 1');
+        
         clusterer = new ymaps.Clusterer({
-            /**
-             * Через кластеризатор можно указать только стили кластеров,
-             * стили для меток нужно назначать каждой метке отдельно.
-             * @see https://api.yandex.ru/maps/doc/jsapi/2.1/ref/reference/option.presetStorage.xml
-             */
+            
             preset: 'islands#invertedBlueClusterIcons',
-            /**
-             * Ставим true, если хотим кластеризовать только точки с одинаковыми координатами.
-             */
+            
             groupByCoordinates: false,
-            /**
-             * Опции кластеров указываем в кластеризаторе с префиксом "cluster".
-             * @see https://api.yandex.ru/maps/doc/jsapi/2.1/ref/reference/ClusterPlacemark.xml
-             */
+            
             clusterDisableClickZoom: true,
             clusterHideIconOnBalloonOpen: false,
             geoObjectHideIconOnBalloonOpen: false
         }),
-        /**
-         * Функция возвращает объект, содержащий данные метки.
-         * Поле данных clusterCaption будет отображено в списке геообъектов в балуне кластера.
-         * Поле balloonContentBody - источник данных для контента балуна.
-         * Оба поля поддерживают HTML-разметку.
-         * Список полей данных, которые используют стандартные макеты содержимого иконки метки
-         * и балуна геообъектов, можно посмотреть в документации.
-         * @see https://api.yandex.ru/maps/doc/jsapi/2.1/ref/reference/GeoObject.xml
-         */
+        
             getPointData = function (address, time, square, surface_type, paid, index) {
             return {
                 balloonContentHeader: '<font size=3><b><p>Данные о поле</p></b></font>',
@@ -81,11 +130,7 @@ while ($row = mysqli_fetch_assoc($query)) {
                 clusterCaption: 'метка <strong>' + index + '</strong>'
             };
         },
-        /**
-         * Функция возвращает объект, содержащий опции метки.
-         * Все опции, которые поддерживают геообъекты, можно посмотреть в документации.
-         * @see https://api.yandex.ru/maps/doc/jsapi/2.1/ref/reference/GeoObject.xml
-         */
+       
             getPointOptions = function () {
             return {
                 preset: 'islands#blueIcon'
@@ -94,40 +139,18 @@ while ($row = mysqli_fetch_assoc($query)) {
         points = <?php echo json_encode($points) ?>,
         geoObjects = [];
 
-    /**
-     * Данные передаются вторым параметром в конструктор метки, опции - третьим.
-     * @see https://api.yandex.ru/maps/doc/jsapi/2.1/ref/reference/Placemark.xml#constructor-summary
-     */
     for(var i = 0, len = points.length; i < len; i++) {
         fields = football_fields[i]
         geoObjects[i] = new ymaps.Placemark(points[i], getPointData(fields["address"], fields["working_hours"], fields["square"], fields["surface_type"], fields["paid"], i), getPointOptions());
     }
 
-    for(var i = 0, len = points.length; i < len; i++) {
-        console.log(points[i][0]);
-        console.log(points[i][1]);
-    }
-
-    console.log(points.length);
-
-    /**
-     * Можно менять опции кластеризатора после создания.
-     */
     clusterer.options.set({
         gridSize: 80,
         clusterDisableClickZoom: true
     });
 
-    /**
-     * В кластеризатор можно добавить javascript-массив меток (не геоколлекцию) или одну метку.
-     * @see https://api.yandex.ru/maps/doc/jsapi/2.1/ref/reference/Clusterer.xml#add
-     */
     clusterer.add(geoObjects);
     myMap.geoObjects.add(clusterer);
-
-    /**
-     * Спозиционируем карту так, чтобы на ней были видны все объекты.
-     */
 
     myMap.setBounds(clusterer.getBounds(), {
         checkZoomRange: true

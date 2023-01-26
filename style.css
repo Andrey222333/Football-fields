@@ -1,5 +1,5 @@
 .body_index{
-    min-height: 100vh;
+    max-height: 100vh;
     margin: 0;
     font-family: 'Roboto Slab', sans-serif;
     background-image: url(img/fon.png);
@@ -91,3 +91,67 @@
     background-color: black;
     cursor: pointer;
 }
+
+.body_filter{
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Roboto Slab', sans-serif;
+    background-image: url(img/fon.png);
+    display: flex;
+    flex-direction: column;
+}
+
+.main_filter{
+    color: white;
+    flex-grow: 1;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+
+.form_filter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form_2{ 
+    width: 400px;
+    padding: 32px;
+    border-radius: 10px;
+    letter-spacing: 1px;
+}
+
+.form_group{
+    position: relative;
+}
+
+.form_div{
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.form_text{
+    font-size: 20px;
+    margin-left: 30px;
+}
+
+.form_select{
+    letter-spacing: 1px;
+    font-size: 16px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 370px;
+    margin-right: 40px;
+}
+
+.form_p{
+    text-align: center;
+    margin-left: 30px;
+}
+
