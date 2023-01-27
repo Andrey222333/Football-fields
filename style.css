@@ -285,3 +285,64 @@
 .newaccount{
     margin-top: 10px;
 }
+
+.body_account{
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Roboto Slab', sans-serif;
+    background-image: url(img/fon.png);
+    display: flex;
+    flex-direction: column;
+}
+
+.main_account{
+    color: white;
+    flex-grow: 1;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    height: 100%;
+}
+
+.styletable{
+    margin: 0 10%;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.tables{
+    color: black;
+    width: 100%;
+    font-size: 18px;
+    text-align: center;
+    background-color: white;
+    border-collapse: collapse;
+}
+
+.tables th{
+    padding: 5px;
+}
+
+.tables td{
+    padding: 5px;
+    border-top: 1px solid #ccc;
+}
+
+.left{
+    text-align: left;
+}
+
+.tables tr{
+    transition: all .3s;
+}
+
+.tables tr:hover{
+    background-color: #ccc;
+}
+
+.title{
+    font-size: 30px;
+    text-align: center;
+}

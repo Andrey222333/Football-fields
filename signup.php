@@ -11,7 +11,7 @@
         $password = md5($password);
         $query =  mysqli_query($mysql, "SELECT * FROM users WHERE name = '$name'AND login = '$login' AND password = '$password';");
         if (mysqli_num_rows($query) == 0) {
-            $query =  mysqli_query($mysql, "INSERT INTO users (name, login, password, id_role) VALUES ('$name', '$login', '$password', 2);");
+            $query =  mysqli_query($mysql, "INSERT INTO users (name, login, password) VALUES ('$name', '$login', '$password');");
             header('Location: login.php');
         } else {
             $_SESSION['message'] = "Такой пользователь существует";

@@ -130,10 +130,10 @@ if (($paid == "Не выбрано" && $surface_type == "Не выбрано" &&
             geoObjectHideIconOnBalloonOpen: false
         }),
         
-            getPointData = function (address, time, square, surface_type, paid, index) {
+            getPointData = function (address, time, square, surface_type, paid, id, index) {
             return {
                 balloonContentHeader: '<font size=3><b><p>Данные о поле</p></b></font>',
-                balloonContentBody: '<p>Адресс: ' + address + '</p><p>Часы работы: '+ time +'</p><p>Площадь площадки: '+ square +'</p><p>Покрытие площадки: '+ surface_type +'</p><p>Стоимость: '+ paid +'</p>',
+                balloonContentBody: '<p>Адресс: ' + address + '</p><p>Часы работы: '+ time +'</p><p>Площадь площадки: '+ square +'</p><p>Покрытие площадки: '+ surface_type +'</p><p>Стоимость: '+ paid +'</p><p><a href="add.php?ID='+ id +'">Добавить в избранное</a></p>',
                 balloonContentFooter: '<font size=1>Информация предоставлена: </font> балуном <strong>метки ' + index + '</strong>',
                 clusterCaption: 'метка <strong>' + index + '</strong>'
             };
@@ -149,7 +149,7 @@ if (($paid == "Не выбрано" && $surface_type == "Не выбрано" &&
 
     for(var i = 0, len = points.length; i < len; i++) {
         fields = football_fields[i]
-        geoObjects[i] = new ymaps.Placemark(points[i], getPointData(fields["address"], fields["working_hours"], fields["square"], fields["surface_type"], fields["paid"], i), getPointOptions());
+        geoObjects[i] = new ymaps.Placemark(points[i], getPointData(fields["address"], fields["working_hours"], fields["square"], fields["surface_type"], fields["paid"], fields["id"],  i), getPointOptions());
     }
 
     clusterer.options.set({
