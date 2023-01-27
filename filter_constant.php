@@ -13,6 +13,4 @@ while ($row = mysqli_fetch_assoc($query)) {
 
 $surface_type = array_unique($surface_type);
 $district = array_unique($district);
-$district = $district;
-
 ?>
