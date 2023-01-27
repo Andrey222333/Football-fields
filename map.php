@@ -1,13 +1,15 @@
 <?php 
 require("database.php");
 
+session_start();
+
 $football_fields = array();
 $points = array();
 $paid = str_replace('_', ' ', $_POST["select1"]);
 $district = str_replace('_', ' ', $_POST["select2"]);
 $surface_type = str_replace('_', ' ', $_POST["select3"]);
 
-if ($paid == "Не выбрано" && $surface_type == "Не выбрано" && $district == "Не выбрано") {
+if (($paid == "Не выбрано" && $surface_type == "Не выбрано" && $district == "Не выбрано") || ($paid == NULL && $surface_type == NULL && $district == NULL)) {
     $query =  mysqli_query($mysql, "SELECT * FROM fields");
     while ($row = mysqli_fetch_assoc($query)) {
         $fields = array();
@@ -63,20 +65,19 @@ if ($paid == "Не выбрано" && $surface_type == "Не выбрано" && 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://api-maps.yandex.ru/2.1/?apikey=deab617f-c9ac-424c-840a-3412b731797d&lang=ru_RU" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;400;700&family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
     <title>Football fields</title>
 </head>
 <body class="body_map">
-    <header class="header">
-        <div class="container-fluid">
-             <div class="row">
-                <div class="col">
-                    <div class="nav-item nav-b"><b>Football fields</b></div>
-                 </div>
-            </div>
-        </div>
-    </header>
+    <?php 
+        if ($_SESSION["user"]){
+            require("components/header_authorized.php");
+        } else {
+            require("components/header_not_authorized.php");
+        }
+    ?>
     <main class="main_map">
         <div id="map" style="width: 100%; height: 90vh">
             <a href="filter.php"><button class="bt" style="position: absolute; margin-top: 10px; margin-right: 10px; right: 0; z-index: 1">Фильтр</button></a>
@@ -109,7 +110,14 @@ if ($paid == "Не выбрано" && $surface_type == "Не выбрано" && 
         myMap.controls.remove('searchControl');
 
         control = myMap.controls.get('routeButtonControl');
-        control.routePanel.state.set('from', 'улица Проходчиков, дом 10, корпус 1');
+        let location = ymaps.geolocation.get();
+
+        location.then(function(res) {
+            let locationText = res.geoObjects.get(0).properties.get('text');
+            console.log(locationText);
+
+            control.routePanel.state.set('from', locationText);
+        });
         
         clusterer = new ymaps.Clusterer({
             
