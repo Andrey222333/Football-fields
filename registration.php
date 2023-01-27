@@ -38,6 +38,10 @@
                                 <label class="form_label">Имя</label>
                             </div>
                             <div class="form_container">
+                                <input class="form_input" type = "email" name="email" placeholder=" " >
+                                <label class="form_label">Почта</label>
+                            </div>
+                            <div class="form_container">
                                 <input class="form_input" type = "text" name="login" placeholder=" " >
                                 <label class="form_label">Логин</label>
                             </div>

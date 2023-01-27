@@ -114,7 +114,6 @@ if (($paid == "Не выбрано" && $surface_type == "Не выбрано" &&
 
         location.then(function(res) {
             let locationText = res.geoObjects.get(0).properties.get('text');
-            console.log(locationText);
 
             control.routePanel.state.set('from', locationText);
         });
@@ -134,8 +133,7 @@ if (($paid == "Не выбрано" && $surface_type == "Не выбрано" &&
             return {
                 balloonContentHeader: '<font size=3><b><p>Данные о поле</p></b></font>',
                 balloonContentBody: '<p>Адресс: ' + address + '</p><p>Часы работы: '+ time +'</p><p>Площадь площадки: '+ square +'</p><p>Покрытие площадки: '+ surface_type +'</p><p>Стоимость: '+ paid +'</p><p><a href="add.php?ID='+ id +'">Добавить в избранное</a></p>',
-                balloonContentFooter: '<font size=1>Информация предоставлена: </font> балуном <strong>метки ' + index + '</strong>',
-                clusterCaption: 'метка <strong>' + index + '</strong>'
+                clusterCaption: '<font><b><p>Данные о поле</p></b></font>'
             };
         },
        
